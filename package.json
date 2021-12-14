@@ -1,0 +1,33 @@
+{
+  "name": "upfi-swap-client",
+  "version": "1.0.0",
+  "description": "Upfi swap client",
+  "main": "index.js",
+  "author": "UPFI",
+  "license": "ISC",
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "tsc -p tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+  },
+  "dependencies": {
+    "@project-serum/anchor": "^0.17.0",
+    "@solana/spl-token": "^0.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.6",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "7.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "ts-loader": "^8.0.8",
+    "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.0.5"
+  }
+}

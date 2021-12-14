@@ -1,0 +1,321 @@
+{
+  "version": "0.0.0",
+  "name": "upfi_swap",
+  "instructions": [
+    {
+      "name": "swap",
+      "accounts": [
+        {
+          "name": "swapInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "srcTokenWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "srcTokenVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destTokenVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destTokenWallet",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "swapper",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amountIn",
+          "type": "u64"
+        },
+        {
+          "name": "minAmountOut",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "SwapInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "isInitialized",
+            "type": "bool"
+          },
+          {
+            "name": "isPaused",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "initialAmpFactor",
+            "type": "u64"
+          },
+          {
+            "name": "targetAmpFactor",
+            "type": "u64"
+          },
+          {
+            "name": "startRampTs",
+            "type": "i64"
+          },
+          {
+            "name": "stopRampTs",
+            "type": "i64"
+          },
+          {
+            "name": "poolMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "futureAdminDeadline",
+            "type": "i64"
+          },
+          {
+            "name": "futureAdminKey",
+            "type": "publicKey"
+          },
+          {
+            "name": "adminKey",
+            "type": "publicKey"
+          },
+          {
+            "name": "fees",
+            "type": {
+              "defined": "Fees"
+            }
+          },
+          {
+            "name": "nCoins",
+            "type": "u64"
+          },
+          {
+            "name": "tokens",
+            "type": {
+              "array": [
+                {
+                  "defined": "PoolTokenInfo"
+                },
+                4
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Fees",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "adminTradeFee",
+            "type": "u32"
+          },
+          {
+            "name": "adminDepositFee",
+            "type": "u32"
+          },
+          {
+            "name": "adminWithdrawFee",
+            "type": "u32"
+          },
+          {
+            "name": "tradeFee",
+            "type": "u32"
+          },
+          {
+            "name": "normalizedFee",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PoolTokenInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tokenMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "tokenVault",
+            "type": "publicKey"
+          },
+          {
+            "name": "adminFee",
+            "type": "publicKey"
+          },
+          {
+            "name": "balance",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SwapError",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "AlreadyInUse"
+          },
+          {
+            "name": "InvalidDepositSigner"
+          },
+          {
+            "name": "InvalidAdmin"
+          },
+          {
+            "name": "InvalidOwner"
+          },
+          {
+            "name": "InvalidPool"
+          },
+          {
+            "name": "InvalidOutputOwner"
+          },
+          {
+            "name": "EmptyPool"
+          },
+          {
+            "name": "EmptySupply"
+          },
+          {
+            "name": "InvalidSupply"
+          },
+          {
+            "name": "InvalidDelegate"
+          },
+          {
+            "name": "InvalidInput"
+          },
+          {
+            "name": "IncorrectSwapAccount"
+          },
+          {
+            "name": "IncorrectMint"
+          },
+          {
+            "name": "CalculationFailure"
+          },
+          {
+            "name": "RepeatedMint"
+          },
+          {
+            "name": "ExceededSlippage"
+          },
+          {
+            "name": "InvalidCloseAuthority"
+          },
+          {
+            "name": "InvalidFreezeAuthority"
+          },
+          {
+            "name": "ConversionFailure"
+          },
+          {
+            "name": "IsPaused"
+          },
+          {
+            "name": "RampLocked"
+          },
+          {
+            "name": "InsufficientRampTime"
+          },
+          {
+            "name": "ActiveTransfer"
+          },
+          {
+            "name": "NoActiveTransfer"
+          },
+          {
+            "name": "AdminDeadlineExceeded"
+          },
+          {
+            "name": "MismatchedDecimals"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "SwapEvent",
+      "fields": [
+        {
+          "name": "from",
+          "type": "publicKey",
+          "index": true
+        },
+        {
+          "name": "swapInfo",
+          "type": "publicKey",
+          "index": true
+        },
+        {
+          "name": "i",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "amountIn",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "j",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "amountOut",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "amountSwapped",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "timestamp",
+          "type": "i64",
+          "index": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "address": "5GaBD7yyLh1TFSJcG9H9j4jSHFMsK8xaJU68NaCLJsvN"
+  }
+}
